@@ -1,0 +1,249 @@
+:root {
+  --text: #1f2933;
+  --muted: #626f7f;
+  --line: #e7eaf0;
+  --soft: #f7f9fc;
+  --accent: #3457d5;
+}
+
+body {
+  color: var(--text);
+  font-family: "Google Sans", Arial, sans-serif;
+}
+
+a {
+  color: var(--accent);
+}
+
+.hero {
+  background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+  border-bottom: 1px solid var(--line);
+}
+
+.publication-venue {
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.publication-title {
+  font-size: clamp(1.8rem, 3.8vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 0 auto 1.4rem;
+  max-width: 1050px;
+}
+
+.publication-authors {
+  font-size: 1.25rem;
+  line-height: 1.8;
+}
+
+.author-block {
+  display: inline-block;
+  margin: 0 0.4rem;
+}
+
+.institution-block {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-top: 0.35rem;
+}
+
+.affiliations-toggle {
+  margin-top: 0.75rem;
+}
+
+.affiliations-toggle summary {
+  cursor: pointer;
+  display: inline-block;
+  list-style: none;
+  user-select: none;
+}
+
+.affiliations-toggle summary::-webkit-details-marker {
+  display: none;
+}
+
+.affiliations-label {
+  align-items: center;
+  color: var(--accent);
+  display: inline-flex;
+  font-size: 0.98rem;
+  font-weight: 600;
+  gap: 0.45rem;
+}
+
+.affiliations-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.affiliations-toggle[open] .affiliations-icon {
+  transform: rotate(90deg);
+}
+
+.affiliations-toggle .institution-block {
+  margin-top: 0.65rem;
+  text-align: center;
+}
+
+.institution-block div {
+  margin: 0.15rem 0;
+}
+
+.author-footnotes {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+}
+
+.author-footnotes span {
+  display: inline-block;
+  margin: 0 0.6rem;
+}
+
+.publication-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.8rem;
+}
+
+.publication-links .button {
+  font-weight: 600;
+  padding-left: 1.1rem;
+  padding-right: 1.1rem;
+}
+
+.teaser-section {
+  padding-top: 2rem;
+}
+
+.teaser-card,
+.image-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(22, 34, 51, 0.08);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.teaser-card img,
+.image-card img {
+  display: block;
+  width: 100%;
+}
+
+.figure-half {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 75%;
+}
+
+.teaser-caption {
+  color: var(--muted);
+  font-size: 1.2rem;
+  line-height: 1.45;
+  margin: 1.4rem auto 0;
+  max-width: 850px;
+}
+
+.paper-text {
+  color: #303b49;
+  font-family: "Noto Serif", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.paper-text ul {
+  margin-left: 1.2rem;
+}
+
+.paper-text li {
+  margin-bottom: 1rem;
+}
+
+.section.is-light {
+  background: var(--soft);
+}
+
+.image-card {
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.image-card + .image-card {
+  margin-top: 2rem;
+}
+
+.image-card.compact {
+  height: 100%;
+}
+
+.image-card figcaption {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0.8rem;
+  text-align: center;
+}
+
+.video-placeholder {
+  align-items: center;
+  background: #111827;
+  border-radius: 18px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 320px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.video-placeholder .icon {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.bibtex {
+  background: #0f172a;
+  border-radius: 14px;
+  color: #e5edf8;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  padding: 1.4rem;
+  white-space: pre;
+}
+
+.footer {
+  background: #ffffff;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  padding: 2rem 1.5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .publication-authors {
+    font-size: 1.1rem;
+  }
+
+  .publication-links {
+    gap: 0.55rem;
+  }
+
+  .video-placeholder {
+    min-height: 220px;
+  }
+
+  .figure-half {
+    max-width: 100%;
+  }
+}

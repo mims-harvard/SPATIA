@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SPATIA: Multimodal Generation and Prediction of Spatial Cell Phenotypes">
+  <meta name="keywords" content="spatial transcriptomics, multimodal learning, cell phenotypes, generative modeling, machine learning">
+  <meta name="author" content="Zhenglun Kong">
+
+  <title>SPATIA: Multimodal Generation and Prediction of Spatial Cell Phenotypes</title>
+
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop has-text-centered">
+        <p class="publication-venue">ICML 2026</p>
+        <h1 class="title publication-title">SPATIA: Multimodal Generation and Prediction of Spatial Cell Phenotypes</h1>
+
+        <div class="publication-authors">
+          <span class="author-block"><a href="#">Zhenglun Kong</a><sup>1,*</sup></span>
+          <span class="author-block"><a href="#">Mufan Qiu</a><sup>1,*</sup></span>
+          <span class="author-block"><a href="#">John Boesen</a><sup>1</sup></span>
+          <span class="author-block"><a href="#">Xiang Lin</a><sup>1</sup></span>
+          <span class="author-block"><a href="#">Sukwon Yun</a><sup>2</sup></span>
+          <span class="author-block"><a href="#">Tianlong Chen</a><sup>2</sup></span>
+          <span class="author-block"><a href="#">Manolis Kellis</a><sup>3</sup></span>
+          <span class="author-block"><a href="#">Marinka Zitnik</a><sup>1,4,5,6,†</sup></span>
+        </div>
+
+        <details class="affiliations-toggle">
+          <summary>
+            <span class="affiliations-label">
+              <i class="fas fa-chevron-right affiliations-icon" aria-hidden="true"></i>
+              Author Affiliations
+            </span>
+          </summary>
+          <div class="publication-authors institution-block">
+            <div><sup>1</sup>Department of Biomedical Informatics, Harvard Medical School, Boston, MA</div>
+            <div><sup>2</sup>Department of Computer Science, University of North Carolina, Chapel Hill, NC</div>
+            <div><sup>3</sup>Massachusetts Institute of Technology, Cambridge, MA</div>
+            <div><sup>4</sup>Kempner Institute for the Study of Natural and Artificial Intelligence, Harvard University, Cambridge, MA</div>
+            <div><sup>5</sup>Broad Institute of MIT and Harvard, Cambridge, MA</div>
+            <div><sup>6</sup>Harvard Data Science Initiative, Cambridge, MA</div>
+          </div>
+        </details>
+
+        <div class="publication-authors author-footnotes">
+          <span><sup>*</sup>Equal contribution</span>
+          <span><sup>†</sup>Corresponding author</span>
+        </div>
+
+        <div class="publication-links">
+          <a class="button is-dark is-rounded" href="https://arxiv.org/pdf/2507.04704" target="_blank" rel="noopener noreferrer">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Paper</span>
+          </a>
+          <a class="button is-dark is-rounded" href="https://arxiv.org/abs/2507.04704" target="_blank" rel="noopener noreferrer">
+            <span class="icon"><i class="fas fa-file-lines"></i></span>
+            <span>arXiv</span>
+          </a>
+          <a class="button is-dark is-rounded" href="https://github.com/mims-harvard/SPATIA/tree/main" target="_blank" rel="noopener noreferrer">
+            <span class="icon"><i class="fab fa-github"></i></span>
+            <span>Code</span>
+          </a>
+          <a class="button is-dark is-rounded" href="#">
+            <span class="icon"><i class="fas fa-database"></i></span>
+            <span>Data</span>
+          </a>
+          <a class="button is-dark is-rounded" href="#bibtex">
+            <span class="icon"><i class="fas fa-quote-right"></i></span>
+            <span>BibTeX</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Abstract</h2>
+      <div class="content paper-text">
+        <p>
+          Understanding how cellular morphology, gene expression, and spatial context jointly shape tissue function is a central challenge in biology. Image-based spatial transcriptomics technologies now provide high-resolution measurements of cell images and gene expression profiles, but existing methods typically analyze these modalities in isolation or at limited resolution.
+          We address the problem by introducing SPATIA, a multi-level generative and predictive model that learns unified, spatially aware representations by fusing morphology, gene expression, and spatial context from the cell to the tissue level. SPATIA also incorporates a novel spatially conditioned generative framework for modeling target-state morphology distributions under observed biological transition families. Specifically, we propose a confidence-aware flow matching objective that reweights weak optimal-transport pairs based on uncertainty. We further apply morphology-profile alignment to encourage biologically meaningful image generation, enabling the modeling of microenvironment-dependent phenotypic transitions. We assembled a multi-scale dataset consisting of 25.9 million cell-gene pairs across 17 tissues. We benchmark SPATIA against 18 models across 12 tasks, spanning categories such as phenotype generation, annotation, clustering, gene imputation, and cross-modal prediction. SPATIA achieves improved performance over state-of-the-art models, improving generative fidelity by 8% and predictive accuracy by up to 3%.
+        </p>
+      </div>
+
+      <figure class="image-card figure-half">
+        <img src="static/images/overview_view.png" alt="Overview of SPATIA">
+        <figcaption>Overview of SPATIA.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Method Overview</h2>
+      <div class="content paper-text">
+        <ul>
+          <li><strong>Hierarchical multi-level architecture:</strong> We introduce SPATIA, a multimodal model that integrates morphology, gene expression, and spatial coordinates through a hierarchical attention design. It aggregates information from local cellular neighborhoods to global tissue structure, explicitly capturing spatial context at multiple levels.</li>
+          <li><strong>Spatially conditioned generative modeling:</strong> We develop a conditional flow-matching module for modeling morphology changes under perturbations, conditioned on both intrinsic cell states and extrinsic spatial niches. Using optimal transport to align distributions, we simulate realistic phenotypic transitions (e.g., DCIS to invasive) without requiring paired pre-post perturbation data.</li>
+          <li><strong>Large-Scale Benchmarking:</strong> We validate SPATIA on MIST, a curated assembly of 25.9M cells from 74 sources. Experiments on 12 predictive and generative tasks demonstrate that SPATIA outperforms 18 existing models, improving generative fidelity by 8% over state-of-the-art models and yielding predictive gains of up to 3% in zero-shot transfer and biomarker classification.</li>
+        </ul>
+      </div>
+
+      <figure class="image-card">
+        <img src="static/images/model_main.png" alt="SPATIA model architecture">
+        <figcaption>Overview of the SPATIA model architecture.</figcaption>
+      </figure>
+
+      <figure class="image-card figure-half">
+        <img src="static/images/levels_niche.png" alt="Multi-level spatial context and training data">
+        <figcaption>Multi-level spatial context and training data across cellular neighborhoods and tissue niches.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Results</h2>
+      <figure class="image-card">
+        <img src="static/images/visual.png" alt="SPATIA qualitative and quantitative results">
+        <figcaption>Qualitative and quantitative results across predictive and generative tasks.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">BibTeX</h2>
+      <pre class="bibtex"><code>@inproceedings{yourpaper2026,
+        title={Spatia: Multimodal model for prediction and generation of spatial cell phenotypes},
+        author={Kong, Zhenglun and Qiu, Mufan and Boesen, John and Lin, Xiang and Yun, Sukwon and Chen, Tianlong and Kellis, Manolis and Zitnik, Marinka},
+        journal={ArXiv},
+        pages={arXiv--2507},
+        year={2025}
+}</code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container is-max-desktop">
+      <div class="content has-text-centered">
+        <p>
+          This page uses a lightweight academic project page layout inspired by popular ML/AI paper pages.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="static/js/index.js"></script>
+</body>
+</html>
