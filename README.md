@@ -11,7 +11,9 @@
 
 Understanding how cellular morphology, gene expression, and spatial context jointly shape tissue function is a central challenge in biology. Image-based spatial transcriptomics technologies now provide high-resolution measurements of cell images and gene expression profiles, but existing methods typically analyze these modalities in isolation or at limited resolution. We address the problem by introducing SPATIA, a multi-level generative and predictive model that learns unified, spatially aware representations by fusing morphology, gene expression, and spatial context from the cell to the tissue level. SPATIA also incorporates a novel spatially conditioned generative framework for modeling target-state morphology distributions under observed biological transition families. Specifically, we propose a confidence-aware flow matching objective that reweights weak optimal-transport pairs based on uncertainty. We further apply morphology-profile alignment to encourage biologically meaningful image generation, enabling the modeling of microenvironment-dependent phenotypic transitions. We assembled a multi-scale dataset consisting of 25.9 million cell-gene pairs across 17 tissues. We benchmark SPATIA against 18 models across 12 tasks, spanning categories such as phenotype generation, annotation, clustering, gene imputation, and cross-modal prediction. SPATIA achieves improved performance over state-of-the-art models, improving generative fidelity by 8% and predictive accuracy by up to 3%.
 
-![Overview of SPATIA](static/images/overview_view.png)
+<p align="center">
+  <img src="static/images/overview_view.png" alt="Overview of SPATIA" width="650">
+</p>
 
 ## 🔬 Method Overview
 
@@ -20,7 +22,6 @@ Understanding how cellular morphology, gene expression, and spatial context join
 - **Large-Scale Benchmarking:** We validate SPATIA on MIST, a curated assembly of 25.9M cells from 74 sources. Experiments on 12 predictive and generative tasks demonstrate that SPATIA outperforms 18 existing models, improving generative fidelity by 8% over state-of-the-art models and yielding predictive gains of up to 3% in zero-shot transfer and biomarker classification.
 
 ![SPATIA model architecture](static/images/model_main.png)
-
 
 ## 🚀 Installation
 
