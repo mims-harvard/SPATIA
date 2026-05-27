@@ -21,11 +21,6 @@ Understanding how cellular morphology, gene expression, and spatial context join
 
 ![SPATIA model architecture](static/images/model_main.png)
 
-![Multi-level spatial context and training data](static/images/levels_niche.png)
-
-## 📊 Results
-
-![SPATIA qualitative and quantitative results](static/images/visual.png)
 
 ## 🚀 Installation
 
