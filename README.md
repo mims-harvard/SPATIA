@@ -78,7 +78,7 @@ For detailed task definitions and evaluation protocols, please refer to the [pro
 ## Citation
 
 ```bibtex
-@inproceedings{kong2026spatia,
+@article{kong2025spatia,
   title={Spatia: Multimodal model for prediction and generation of spatial cell phenotypes},
   author={Kong, Zhenglun and Qiu, Mufan and Boesen, John and Lin, Xiang and Yun, Sukwon and Chen, Tianlong and Kellis, Manolis and Zitnik, Marinka},
   journal={ArXiv},
