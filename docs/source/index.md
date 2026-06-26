@@ -5,6 +5,7 @@
 [![Website](https://img.shields.io/badge/Website-SPATIA-4CAF50?logo=googlechrome&logoColor=white)](https://zitniklab.hms.harvard.edu/SPATIA/)
 [![Paper](https://img.shields.io/badge/Paper-arXiv%202507.04704-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2507.04704)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-mims--harvard-FFD21E)](https://huggingface.co/mims-harvard)
+[![Docs](https://img.shields.io/badge/Docs-readthedocs-blue?logo=readthedocs&logoColor=white)](https://mims-harvard.readthedocs.io/en/latest/)
 [![Lab](https://img.shields.io/badge/Lab-Zitnik%20Lab%20%40%20Harvard-crimson)](https://zitniklab.hms.harvard.edu/)
 [![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.4.0-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
