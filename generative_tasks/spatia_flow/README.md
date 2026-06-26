@@ -1,4 +1,4 @@
-# SPATIA-CellFlux
+# SPATIA-Flow
 
 State-conditioned cell image generation via flow matching. Given a control cell H&E crop, generates the predicted target cell image after a biological perturbation.
 
