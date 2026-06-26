@@ -1,0 +1,34 @@
+# TASK NAME 
+task_name: xenium_spatia
+
+ood_set: []
+mol_list: null
+trainable_emb: False
+dataset_name: 'xenium'
+n_channels: 3 
+multimodal: False
+batch_correction: False
+batch_key: null
+use_condition_embeddings: True
+add_controls: False
+condition_embedding_dimension: 512  # SPATIA embedding dimension
+modality_list: 
+  - Spatial
+
+# DIRECTORIES FOR DATA (following scgpt_spatial pattern)
+# Either image_path OR spatial_datadir should be provided
+image_path: null  # Path to image directory (optional if using LMDB)
+spatial_datadir: /path/to/data/lmdb/xenium_multiscale_0514.lmdb  # LMDB image database (scgpt_spatial format)
+dataset_name: xenium_data  # Dataset name for LMDB key construction
+
+# SPATIA model files (required)
+spatia_model_path: /path/to/spatia-scgpt/checkpoint/  # SPATIA model directory
+spatia_vocab_path: /path/to/spatia-scgpt/checkpoint/vocab.json  # Gene vocabulary
+spatia_gene_stats: /path/to/spatia-scgpt/checkpoint/all_dict_mean_std.csv  # Gene statistics
+
+# Spatial expression data (required)
+spatial_data_path: /path/to/data/COAD_filtered.h5ad  # Update this path to your h5ad file
+
+# DATA HANDLEMENT 
+augment_train: True 
+normalize: True

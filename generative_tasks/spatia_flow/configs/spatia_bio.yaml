@@ -1,0 +1,72 @@
+# SPATIA-CellFlux: Biological Perturbation Image Generation
+# Uses pretrained MorphProxyEncoder for morphology conditioning
+task_name: spatia_perturbation
+dataset: xenium_small
+dataset_name: xenium
+n_channels: 3
+image_size: 256
+
+# Data paths
+adata_path: /path/to/data/adata_with_coords.h5ad
+pairs_csv: /path/to/data/spatia_pairs/perturbation_pairs.csv
+lmdb_path: /path/to/data/xenium_he_rep1_192px.lmdb
+delta_g_npz: /path/to/data/spatia_pairs/delta_g_signatures.npz
+delta_m_npz: /path/to/data/spatia_pairs/delta_m_signatures.npz
+
+# SPATIA model paths
+spatia_model_path: /path/to/spatia-scgpt/checkpoint/
+spatia_vocab_path: /path/to/spatia-scgpt/checkpoint/vocab.json
+spatia_gene_stats: /path/to/spatia-scgpt/checkpoint/all_dict_mean_std.csv
+
+# Conditioning
+use_condition_embeddings: True
+condition_embedding_dimension: 512
+trainable_emb: False
+modality_list:
+  - Spatial
+
+# Training
+augment_train: True
+normalize: True
+add_controls: False
+batch_correction: False
+batch_key: null
+multimodal: False
+ood_set: []
+mol_list: null
+
+# Hyperparameters
+lr: 0.0001
+optimizer_betas: [0.9, 0.95]
+class_drop_prob: 0.1
+use_initial: 1
+noise_level: 0.2
+noise_prob: 0.5
+skewed_timesteps: False
+edm_schedule: False
+ode_method: midpoint
+ode_options:
+  step_size: 0.01
+cfg_scale: 0.2
+
+# SPATIA losses
+use_weighted_fm: True
+ot_alpha: 1.0
+lambda_contrast: 0.1
+lambda_morph: 0.1
+use_spatia_conditioner: True
+
+# Morphology proxy encoder (pretrained on regionprops)
+morph_proxy_checkpoint: ./checkpoints/morph_proxy_encoder.pth
+
+spatia_conditioner_config:
+  num_transitions: 10
+  dim_g: 313    # Xenium panel: 313 genes
+  dim_m: 10
+  embed_dim: 512
+  ctrl_embed_dim: 512
+  dropout: 0.1
+
+# Set to null for full training (all pairs)
+max_pairs: null
+iter_ctrl: False

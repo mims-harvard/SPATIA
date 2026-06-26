@@ -1,0 +1,2 @@
+from .embedder import protein_embeddings_generator
+from .protein_embedder import PROTBERT

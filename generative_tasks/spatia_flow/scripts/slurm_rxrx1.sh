@@ -1,0 +1,22 @@
+python submitit_train.py \
+    --dataset=rxrx1 \
+    --config=rxrx1 \
+    --batch_size=32 \
+    --accum_iter=1 \
+    --eval_frequency=10 \
+    --epochs=100 \
+    --class_drop_prob=0.2 \
+    --cfg_scale=0.2 \
+    --compute_fid \
+    --ode_method heun2 \
+    --ode_options '{"nfe": 50}' \
+    --use_ema \
+    --edm_schedule \
+    --skewed_timesteps \
+    --fid_samples=30720 \
+    --job_dir=/path/to/your/outputs/ \
+    --shared_dir=/path/to/your/shared/ \
+    --use_initial=2 \
+    --noise_level=1.0 \
+    --noise_prob=0.5 \
+    --save_fid_samples

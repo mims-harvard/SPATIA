@@ -1,0 +1,21 @@
+python submitit_train.py \
+    --dataset=cpg0000 \
+    --config=cpg0000 \
+    --batch_size=16 \
+    --accum_iter=2 \
+    --eval_frequency=10 \
+    --epochs=100 \
+    --class_drop_prob=0.2 \
+    --cfg_scale=0.2 \
+    --compute_fid \
+    --ode_method heun2 \
+    --ode_options '{"nfe": 50}' \
+    --use_ema \
+    --edm_schedule \
+    --skewed_timesteps \
+    --fid_samples=10240 \
+    --job_dir=/path/to/your/outputs/ \
+    --shared_dir=/path/to/your/shared/ \
+    --use_initial=2 \
+    --noise_level=1.0 \
+    --noise_prob=0.5 \

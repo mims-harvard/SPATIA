@@ -1,0 +1,214 @@
+from typing import Optional
+
+import numpy as np
+import torch
+from torch import Tensor, long
+
+from .utils import downsample_profile, load_genes
+
+
+class Collator:
+    def __init__(
+        self,
+        organisms: list[str],
+        how: str = "all",
+        org_to_id: dict[str, int] = None,
+        valid_genes: list[str] = [],
+        max_len: int = 2000,
+        add_zero_genes: int = 0,
+        logp1: bool = False,
+        norm_to: Optional[float] = None,
+        n_bins: int = 0,
+        tp_name: Optional[str] = None,
+        organism_name: str = "organism_ontology_term_id",
+        class_names: list[str] = [],
+        genelist: list[str] = [],
+        downsample: Optional[float] = None,
+        save_output: bool = False,
+    ):
+        self.organisms = organisms
+        self.genedf = load_genes(organisms)
+        self.max_len = max_len
+        self.n_bins = n_bins
+        self.add_zero_genes = add_zero_genes
+        self.logp1 = logp1
+        self.norm_to = norm_to
+        self.how = how
+        if self.how == "some":
+            assert len(genelist) > 0, "if how is some, genelist must be provided"
+        self.organism_name = organism_name
+        self.tp_name = tp_name
+        self.class_names = class_names
+        self.save_output = save_output
+        self.start_idx = {}
+        self.accepted_genes = {}
+        self.downsample = downsample
+        self.to_subset = {}
+        self._setup(org_to_id, valid_genes, genelist)
+
+    def _setup(self, org_to_id=None, valid_genes=[], genelist=[]):
+        self.org_to_id = org_to_id
+        self.to_subset = {}
+        self.accepted_genes = {}
+        self.start_idx = {}
+        self.organism_ids = (
+            set([org_to_id[k] for k in self.organisms])
+            if org_to_id is not None
+            else set(self.organisms)
+        )
+        for organism in self.organisms:
+            ogenedf = self.genedf[self.genedf.organism == organism]
+            if len(valid_genes) > 0:
+                tot = self.genedf[self.genedf.index.isin(valid_genes)]
+            else:
+                tot = self.genedf
+            org = org_to_id[organism] if org_to_id is not None else organism
+            self.start_idx.update({org: np.where(tot.organism == organism)[0][0]})
+            if len(valid_genes) > 0:
+                self.accepted_genes.update({org: ogenedf.index.isin(valid_genes)})
+            if len(genelist) > 0:
+                df = ogenedf[ogenedf.index.isin(valid_genes)]
+                self.to_subset.update({org: df.index.isin(genelist)})
+
+    def __call__(self, batch) -> dict[str, Tensor]:
+        exprs = []
+        total_count = []
+        other_classes = []
+        gene_locs = []
+        tp = []
+        dataset = []
+        nnz_loc = []
+        images = []
+        region_images = []
+        tissue_images = []
+        
+        for elem in batch:
+            organism_id = elem[self.organism_name]
+            if organism_id not in self.organism_ids:
+                continue
+            if "_storage_idx" in elem:
+                dataset.append(elem["_storage_idx"])
+            expr = np.array(elem["X"])
+            total_count.append(expr.sum())
+            if len(self.accepted_genes) > 0:
+                expr = expr[self.accepted_genes[organism_id]]
+            if self.how == "most expr":
+                nnz_loc = np.where(expr > 0)[0]
+                ma = self.max_len if self.max_len < len(nnz_loc) else len(nnz_loc)
+                loc = np.argsort(expr)[-(ma):][::-1]
+            elif self.how == "random expr":
+                nnz_loc = np.where(expr > 0)[0]
+                loc = nnz_loc[
+                    np.random.choice(
+                        len(nnz_loc),
+                        self.max_len if self.max_len < len(nnz_loc) else len(nnz_loc),
+                        replace=False,
+                    )
+                ]
+            elif self.how in ["all", "some"]:
+                loc = np.arange(len(expr))
+            else:
+                raise ValueError("how must be either most expr or random expr")
+            if (
+                (self.add_zero_genes > 0) or (self.max_len > len(nnz_loc))
+            ) and self.how not in [
+                "all",
+                "some",
+            ]:
+                zero_loc = np.where(expr == 0)[0]
+                zero_loc = zero_loc[
+                    np.random.choice(
+                        len(zero_loc),
+                        self.add_zero_genes
+                        + (
+                            0
+                            if self.max_len < len(nnz_loc)
+                            else self.max_len - len(nnz_loc)
+                        ),
+                        replace=False,
+                    )
+                ]
+                loc = np.concatenate((loc, zero_loc), axis=None)
+            expr = expr[loc]
+            loc = loc + self.start_idx[organism_id]
+            if self.how == "some":
+                expr = expr[self.to_subset[organism_id]]
+                loc = loc[self.to_subset[organism_id]]
+            exprs.append(expr)
+            gene_locs.append(loc)
+
+            if self.tp_name is not None:
+                tp.append(elem[self.tp_name])
+            else:
+                tp.append(0)
+
+            other_classes.append([elem[i] for i in self.class_names])
+            images.append(elem["image"])
+            
+            if "region_image" in elem:
+                region_images.append(elem["region_image"])
+            else:
+                region_images.append(torch.zeros_like(elem["image"]))
+                
+            if "tissue_image" in elem:
+                tissue_images.append(elem["tissue_image"])
+            else:
+                tissue_images.append(torch.zeros_like(elem["image"]))
+
+        expr = np.array(exprs)
+        tp = np.array(tp)
+        gene_locs = np.array(gene_locs)
+        total_count = np.array(total_count)
+        other_classes = np.array(other_classes)
+        dataset = np.array(dataset)
+        images = torch.stack(images, dim=0)
+        region_images = torch.stack(region_images, dim=0)
+        tissue_images = torch.stack(tissue_images, dim=0)
+
+        if self.norm_to is not None:
+            expr = (expr * self.norm_to) / total_count[:, None]
+        if self.logp1:
+            expr = np.log2(1 + expr)
+
+        if self.n_bins:
+            pass
+
+
+        ret = {
+            "x": Tensor(expr),
+            "genes": Tensor(gene_locs).int(),
+            "class": Tensor(other_classes).int(),
+            "tp": Tensor(tp),
+            "depth": Tensor(total_count),
+            "image": images,
+            "region_image": region_images,
+            "tissue_image": tissue_images,
+        }
+        if len(dataset) > 0:
+            ret.update({"dataset": Tensor(dataset).to(long)})
+        if self.downsample is not None:
+            ret["x"] = downsample_profile(ret["x"], self.downsample)
+        if self.save_output:
+            with open("collator_output.txt", "a") as f:
+                np.savetxt(f, ret["x"].numpy())
+        return ret
+
+
+class GeneformerCollator(Collator):
+    def __init__(self, *args, gene_norm_list: list, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.gene_norm_list = gene_norm_list
+
+    def __call__(self, batch):
+        super().__call__(batch)
+
+
+class scGPTCollator(Collator):
+
+    def __call__(self, batch):
+        super().__call__(batch)
+
+
+class scPRINTCollator(Collator):
+    def __call__(self, batch):
+        super().__call__(batch)
