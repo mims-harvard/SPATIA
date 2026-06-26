@@ -3,9 +3,12 @@
 </h1>
 
 <p align="center">
+  <a href="https://zitniklab.hms.harvard.edu/SPATIA/"><img src="https://img.shields.io/badge/Website-SPATIA-4CAF50?logo=googlechrome&logoColor=white" /></a>
+  <a href="https://arxiv.org/abs/2507.04704"><img src="https://img.shields.io/badge/Paper-arXiv%202507.04704-b31b1b?logo=arxiv&logoColor=white" /></a>
+  <a href="https://huggingface.co/mims-harvard"><img src="https://img.shields.io/badge/🤗%20HuggingFace-mims--harvard-FFD21E" /></a>
   <a href="https://zitniklab.hms.harvard.edu/"><img src="https://img.shields.io/badge/Lab-Zitnik%20Lab%20%40%20Harvard-crimson" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Python-3.10-blue" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/PyTorch-2.4.0-orange" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/PyTorch-2.4.0-EE4C2C?logo=pytorch&logoColor=white" /></a>
 </p>
 
 ## Overview
