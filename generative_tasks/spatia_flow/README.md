@@ -114,25 +114,6 @@ python -m torch.distributed.run --nproc_per_node=2 --master_port=29502 \
 
 > Use `python -m torch.distributed.run` instead of `torchrun` to ensure the conda env Python is used.
 
-### Key Config Settings (`configs/spatia_bio.yaml`)
-
-| Setting | Value | Note |
-|---------|-------|------|
-| `use_initial` | **1** | Image-to-image. Must be 1, not 0 |
-| `dim_g` | 313 | Xenium panel gene count |
-| `use_weighted_fm` | True | OT-confidence weighted FM loss |
-| `lambda_contrast` | 0.1 | Contrastive conditioning loss |
-| `lambda_morph` | 0.1 | SWD morphology alignment loss |
-
-### Expected Loss Progression
-
-| Epoch | FM Loss | Total Loss |
-|-------|---------|------------|
-| 0 | 0.18 | 0.26 |
-| 5 | 0.16 | 0.17 |
-| 15 | 0.16 | 0.17 |
-
-If FM loss is >1.0, verify `use_initial=1` in `args.json`.
 
 ## 4. Output Structure & Visualization
 
@@ -159,11 +140,3 @@ python train_xenium_spatia.py \
     --fid_samples 200
 ```
 
-## 5. Troubleshooting
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| FM loss ~1.08 | `use_initial=0` (noise→image) | Set `use_initial: 1` in YAML config |
-| CUDA OOM | Batch too large | Reduce `batch_size` or `max_pairs` |
-| Missing LMDB images | Key format mismatch | Keys must be `{dataset_name}/{cell_id}` |
-| Wrong Python env | System `torchrun` | Use `python -m torch.distributed.run` |
