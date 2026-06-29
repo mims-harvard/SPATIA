@@ -3,37 +3,6 @@
 Reproducible evaluation scripts for the clustering and cell-annotation
 benchmarks reported in the SPATIA paper (Section 6.1, Tables 2 & 4).
 
-## Covered Tasks
-
-| Task | Script | Data | Paper Table |
-|------|--------|------|-------------|
-| Cross-platform clustering (Xenium + CosMx) | `multi_seed_clustering.py` | `{Platform}_10K.h5ad` | Table 2 |
-| Biomarker prediction (HEST benchmark) | `table3_hest_benchmark.py` | Auto-downloaded from HuggingFace | Table 3 |
-| scRNA-seq clustering (GSE155468) — SPATIA only | `extract_spatia_embeddings.py` + `multi_seed_clustering.py` | `GSE155468.h5ad` | Table 4 |
-| scRNA-seq clustering — all baselines | `table4_extract_and_eval.py` | `GSE155468.h5ad` | Table 4 |
-| Cell annotation (GSE155468) | `annotation_eval.py` | `GSE155468.h5ad` | Table 4 |
-
-## Directory Structure
-
-```
-prediction_tasks/
-├── scripts/
-│   ├── extract_spatia_embeddings.py   # Extract SPATIA-scprint embeddings (spatial or gene-only)
-│   ├── multi_seed_clustering.py       # Multi-seed Leiden evaluation (Tables 2 & 4)
-│   ├── table3_hest_benchmark.py       # HEST biomarker prediction benchmark (Table 3)
-│   ├── table4_extract_and_eval.py     # Extract all Table 4 baselines + run clustering
-│   └── annotation_eval.py             # Supervised cell annotation (F1, precision)
-├── results/
-│   ├── multi_seed_eval/               # Table 2 results
-│   │   ├── table2_summary.csv
-│   │   └── table2_detailed.json
-│   └── table4_clustering/             # Table 4 results
-│       ├── table4_clustering_summary.csv
-│       ├── table4_clustering_detailed.json
-│       └── embeddings/                # Pre-extracted .npy files (+ labels.csv)
-└── logs/                              # Reference run logs
-```
-
 ## Installation
 
 **Full install** (GPU embedding extraction + evaluation):
@@ -82,7 +51,7 @@ must match the order of the embedding rows.
 
 ---
 
-## Table 2: Cross-Platform Clustering (Xenium + CosMx)
+## Cross-Platform Clustering (Xenium + CosMx)
 
 ### Step 1 — Extract SPATIA embeddings
 
@@ -131,14 +100,14 @@ python scripts/multi_seed_clustering.py \
 
 ---
 
-## Table 3: Biomarker Prediction (HEST Benchmark)
+## Biomarker Prediction (HEST Benchmark)
 
 Uses SPATIA's ViT-MAE image encoder to predict gene expression from
 histology patches, following the HEST evaluation protocol (Jaume et al. 2024).
 
 ```bash
 # GPU required. Data auto-downloads from HuggingFace on first run.
-python scripts/table3_hest_benchmark.py \
+python scripts/hest_benchmark.py \
     --download --datasets IDC \
     --batch-size 64 --method xgboost --dimreduce PCA --latent-dim 256
 ```
@@ -151,7 +120,7 @@ Add more datasets as needed: `--datasets IDC PAAD SKCM COAD LUAD`.
 
 ---
 
-## Table 4: scRNA-seq Clustering (GSE155468)
+## scRNA-seq Clustering (GSE155468)
 
 Dataset: Li et al. 2020, GEO accession **GSE155468** — 48,082 cells, 11 cell types.
 Download the processed `.h5ad` from GEO and place it at `GSE155468.h5ad`.
@@ -178,7 +147,7 @@ python scripts/multi_seed_clustering.py \
 
 ```bash
 # Extract all embeddings in one go
-python scripts/table4_extract_and_eval.py \
+python scripts/extract_and_eval.py \
     --step extract --model all \
     --data_path /path/to/GSE155468.h5ad \
     --output_dir results/table4_clustering \
@@ -191,29 +160,16 @@ python scripts/table4_extract_and_eval.py \
     --spatia_stats_dir /path/to/scGPT-spatial/checkpoints/scGPT_spatial_v1
 
 # Run multi-seed clustering (2000-cell stratified subsample, resolution sweep 0.1-1.4)
-python scripts/table4_extract_and_eval.py \
+python scripts/extract_and_eval.py \
     --step cluster \
     --data_path /path/to/GSE155468.h5ad \
     --output_dir results/table4_clustering \
     --n_seeds 5
 ```
 
-**Expected outputs:**
-```
-results/table4_clustering/
-    table4_clustering_summary.csv
-    table4_clustering_detailed.json
-    embeddings/
-        pca_embeddings.npy
-        scgpt_embeddings.npy
-        geneformer_embeddings.npy
-        spatia_embeddings.npy
-        cellplm_embeddings.npy   # if CellPLM checkpoint available
-```
-
 ---
 
-## Cell Annotation (Table 4)
+## Cell Annotation 
 
 Supervised linear-probe annotation on frozen embeddings: train a classifier on
 a stratified train split and report macro F1 and macro precision on the held-out
@@ -235,41 +191,20 @@ If `labels.csv` is not next to the embeddings, add `--data_path /path/to/GSE1554
 
 ## Evaluation Protocol
 
-### Table 2 (Spatial clustering)
+### Spatial clustering
 - Resolution sweep: `[0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0, 3.0, 5.0]`
 - Seeds: 5, no subsampling
 - Metrics: ARI and NMI (best over resolution sweep per seed, then mean ± std)
 
-### Table 3 (HEST biomarker prediction)
+### HEST biomarker prediction
 - Encoder: ViT-MAE base (768-d patch embeddings)
 - Pipeline: PCA(256) -> XGBoost -> 50-HVG Pearson correlation
 - Datasets: IDC (and optionally PAAD, SKCM, COAD, LUAD)
 - Data auto-downloaded from HuggingFace (`MahmoodLab/hest-bench`)
 
-### Table 4 (scRNA-seq clustering, CellPLM protocol)
+### scRNA-seq clustering, CellPLM protocol
 - Resolution sweep: `[0.1, 0.2, ..., 1.4]`
 - Seeds: 5, 2000-cell stratified subsample per seed
 - Metrics: ARI and NMI (best over resolution sweep per seed, then mean ± std)
 
 ---
-
-## Existing Results
-
-Pre-computed results are stored in `results/`. Key numbers:
-
-**Table 3** (HEST benchmark, IDC):
-
-| Model | PCC (mean ± std) |
-|-------|-----------------|
-| SPATIA (ViT-MAE) | 0.404 ± 0.012 |
-
-**Table 4** (5-seed mean ± std, 2K subsample):
-
-| Model | ARI | NMI |
-|-------|-----|-----|
-| SPATIA | 0.874 ± 0.022 | 0.846 ± 0.021 |
-| scGPT | 0.845 ± 0.017 | 0.821 ± 0.011 |
-| PCA | 0.832 ± 0.015 | 0.829 ± 0.018 |
-| Geneformer | 0.479 ± 0.012 | 0.595 ± 0.023 |
-
-See `results/multi_seed_eval/results_summary.md` for full details.
