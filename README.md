@@ -153,7 +153,7 @@ See **[prediction_tasks/README.md](prediction_tasks/README.md)** for the full pr
 
 OT-based data pairing (Stage 2) followed by flow-matching image generation (Stage 3).
 
-See **[generative_tasks/spatia_flow/README.md](generative_tasks/spatia_flow/README.md)** for training config, data pairing, and inference details.
+See **[generative_tasks/spatia_flow/README.md](https://github.com/mims-harvard/SPATIA/tree/main/generative_tasks)** for training config, data pairing, and inference details.
 
 ---
 
