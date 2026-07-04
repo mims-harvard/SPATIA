@@ -179,12 +179,11 @@ paper for the full hierarchy.
 ## Citation
 
 ```bibtex
-@article{kong2025spatia,
+@article{kong2026spatia,
   title={Spatia: Multimodal model for prediction and generation of spatial cell phenotypes},
   author={Kong, Zhenglun and Qiu, Mufan and Boesen, John and Lin, Xiang and Yun, Sukwon and Chen, Tianlong and Kellis, Manolis and Zitnik, Marinka},
-  journal={ArXiv},
-  pages={arXiv--2507},
-  year={2025}
+  booktitle = {Proceedings of the 43th International Conference on Machine Learning},
+  year={2026}
 }
 ```
 
