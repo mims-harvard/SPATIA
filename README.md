@@ -90,6 +90,28 @@ model = SPATIA.from_config(
 
 ---
 
+**Usage:**
+Models are saved to https://huggingface.co/mims-harvard/SPATIA
+
+```python
+import torch
+# Load pretrained weights
+checkpoint = torch.load("pretrained/best_model.pt", map_location="cpu")
+model.load_state_dict(checkpoint)
+```
+
+
+`spatia_embeddings.npy` contains cell embeddings extracted from the pretrained SPATIA model on the MIST atlas. These embeddings fuse morphological and transcriptomic information and can be used directly for downstream tasks without requiring a GPU.
+
+**Usage:**
+
+```python
+import numpy as np
+embeddings = np.load("embeddings/spatia_embeddings.npy")
+print(embeddings.shape)  # (num_cells, embedding_dim)
+```
+---
+
 ## MIST Dataset Construction
 
 See **[data_processing/README.md](data_processing/README.md)** for the full MIST dataset construction pipeline (image cropping, h5ad annotation, LMDB merging, and data loading).
