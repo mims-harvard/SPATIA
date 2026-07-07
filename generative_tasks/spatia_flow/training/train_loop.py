@@ -86,10 +86,10 @@ def compute_contrastive_condition_loss(
 ) -> torch.Tensor:
     with torch.cuda.amp.autocast():
         v_pred_pos = model(x_t, t, extra=cond_positive)
-        loss_pos = torch.sum((v_pred_pos - target_velocity) ** 2, dim=[1, 2, 3])
-        
+        loss_pos = torch.mean((v_pred_pos - target_velocity) ** 2, dim=[1, 2, 3])
+
         v_pred_neg = model(x_t, t, extra=cond_negative)
-        loss_neg = torch.sum((v_pred_neg - target_velocity) ** 2, dim=[1, 2, 3])
+        loss_neg = torch.mean((v_pred_neg - target_velocity) ** 2, dim=[1, 2, 3])
     
     contrastive_loss = torch.relu(loss_pos - loss_neg + margin).mean()
     

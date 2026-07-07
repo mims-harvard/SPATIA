@@ -1,6 +1,6 @@
-# SPATIA-CellFlux: Biological Perturbation Image Generation
-# Uses pretrained MorphProxyEncoder for morphology conditioning
-task_name: spatia_perturbation
+# SPATIA-CellFlux: FM-only pretraining (Stage 1 of two-stage training)
+# Train with flow matching loss only, then resume with spatia_bio.yaml to add auxiliary losses.
+task_name: spatia_perturbation_pretrain
 dataset: xenium
 dataset_name: xenium
 n_channels: 3
@@ -49,24 +49,22 @@ ode_options:
   step_size: 0.01
 cfg_scale: 0.2
 
-# SPATIA losses
+# Stage 1: FM-only (disable auxiliary losses to let FM converge first)
 use_weighted_fm: True
 ot_alpha: 1.0
-lambda_contrast: 0.05
-lambda_morph: 0.05
+lambda_contrast: 0.0
+lambda_morph: 0.0
 use_spatia_conditioner: True
 
-# Morphology proxy encoder (pretrained on regionprops)
 morph_proxy_checkpoint: ./checkpoints/morph_proxy_encoder.pth
 
 spatia_conditioner_config:
   num_transitions: 10
-  dim_g: 313    # Xenium panel: 313 genes
+  dim_g: 313
   dim_m: 10
   embed_dim: 512
   ctrl_embed_dim: 512
   dropout: 0.1
 
-# Set to null for full training (all pairs)
 max_pairs: null
 iter_ctrl: False
